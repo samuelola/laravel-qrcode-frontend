@@ -45,27 +45,27 @@
 
     <script>
 
-       // var myVar = setInterval(function(){ 
+       var myVar = setInterval(function(){ 
             
-       //      $.ajax({
-       //         type:'GET',
-       //         url:"/run",
+            $.ajax({
+               type:'GET',
+               url:"/run",
                
-       //         success:function(){
+               success:function(){
            
-       //             console.log('success');
-       //         }
+                   console.log('success');
+               }
 
-       //     });
+           });
 
-       //  }, 180000);
+        }, 180000);
 
         
 
     </script>
 
 
-    <script>
+    {{-- <script>
 
        var samVar = setInterval(function(){ 
             
@@ -73,26 +73,26 @@
                type:'GET',
                url:"/testcron",
                
-               success:function(){
+                success:function(){
                  
                   
            
-                   console.log('alert');
-               }
+                    console.log('alert');
+                }
 
            });
 
-        }, 120000);
+         }, 120000);
 
         
 
-    </script>
+    </script> --}}
 
 
     <script>
         function stop() {
            
-             clearInterval(samVar);
+             clearInterval(myVar);
 
         }
     </script>

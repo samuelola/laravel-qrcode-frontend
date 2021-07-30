@@ -33,3 +33,11 @@ Route::get('/crypto', 'ProductController@crypto')->name('products.crypto');
 Route::get('/run', 'ProductController@sch')->name('products.sch');
 
 Route::get('/testcron', 'ProductController@test_cron')->name('products.test_cron');
+
+Route::get('/initial', 'ProductController@initial')->name('initial');
+
+Route::get('/payment/callback', 'ProductController@sammy');
+
+Route::get('/charge_authorization/{id}', 'ProductController@charge')->name('charge');
+
+Route::get('/transferrecipient', 'ProductController@transferrecipient')->name('transferrecipient');

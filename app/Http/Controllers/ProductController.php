@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use GuzzleHttp;
 use Illuminate\Support\Facades\Http;
+use App\Transaction;
+use App\Charges;
 class ProductController extends Controller
 {
     public function index(Request $request){
@@ -55,6 +57,146 @@ class ProductController extends Controller
 
         return view('products.show',compact('qrcode'));
     }
+
+
+
+    public function initial(Request $request){
+
+        $client = new GuzzleHttp\Client();
+
+        $Authorizationcode = 'Bearer sk_test_bd26d3bef795b1b0896128cc607ce244af635f69';
+
+
+        $headers = [
+
+            'Accept'=>'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => $Authorizationcode
+        ];
+
+
+        $data = [
+
+            'email'=> "oladelesamuel48@email.com",
+            'amount'=>20000,
+
+        ];
+
+        $res = $client->request('POST', 'https://api.paystack.co/transaction/initialize',[
+
+             'headers'=>$headers,
+             'body'=>json_encode($data)
+              
+        ]);
+
+        $qrcode = json_decode((string) $res->getBody(),true);
+
+        return $qrcode;
+    }
+
+
+    public function sammy(Request $request){
+        
+        
+        
+        $client = new GuzzleHttp\Client();
+
+        $Authorizationcode = 'Bearer sk_test_bd26d3bef795b1b0896128cc607ce244af635f69';
+
+
+        $headers = [
+
+            'Accept'=>'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => $Authorizationcode
+        ];
+
+
+        $refParam = $request->reference;
+
+
+        $res = $client->request('GET', "https://api.paystack.co/transaction/verify/".$refParam,[
+
+             'headers'=>$headers
+             
+              
+        ]);
+
+        $qrcode = json_decode((string) $res->getBody(),true);  
+            
+        $sam = $qrcode['data']['authorization']['authorization_code'];
+       
+        $auth_code = $sam;
+
+        $tran_id = Transaction::create([
+
+             'user_id' =>1,
+             'amount'  =>$qrcode['data']['amount'],
+             'reference' => $qrcode['data']['reference'],
+             'authorization' => $auth_code,
+             'status'  => $qrcode['data']['status']
+        ])->id;
+
+
+        return redirect()->route('charge',$tran_id);
+
+
+    }
+
+
+    public function charge($id){
+
+        $tran = Transaction::where('id',$id)->first();
+
+        $client = new GuzzleHttp\Client();
+
+        $Authorizationcode = 'Bearer sk_test_bd26d3bef795b1b0896128cc607ce244af635f69';
+
+
+        $headers = [
+
+            'Accept'=>'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => $Authorizationcode
+        ];
+
+
+        $data = [
+
+            'email'=> "oladelesamuel48@email.com",
+            'amount'=>20000,
+            'authorization_code'=>$tran->authorization
+
+        ];
+
+        $res = $client->request('POST', 'https://api.paystack.co/transaction/charge_authorization',[
+
+             'headers'=>$headers,
+             'body'=>json_encode($data)
+              
+        ]);
+
+        $qrcode = json_decode((string) $res->getBody(),true);
+
+        Charges::create([
+
+             'user_id' =>1,
+             'amount'  =>$qrcode['data']['amount'],
+             'reference' => $qrcode['data']['reference'],
+             'authorization_code' => $tran->authorization,
+             'status'  => $qrcode['data']['status'],
+             'currency'  => $qrcode['data']['currency'],
+             'last4'  => $qrcode['data']['authorization']['last4'],
+             'card_type'  => $qrcode['data']['authorization']['card_type'],
+        ]);
+
+        
+          return "you have been charged";
+    }
+
+
+
+    
 
 
     public function currency(){
