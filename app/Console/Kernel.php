@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
         
         Commands\HappyBirthday::class,
         Commands\EmailInactiveUsers::class,
+        Commands\updateregister::class,
+        Commands\HourlyUpdate::class
     ];
 
     /**
@@ -30,10 +32,20 @@ class Kernel extends ConsoleKernel
 
         // $schedule->command('sms:birthday')->daily();
 
-        $schedule->command('email:inactive-users')->everyMinute();
+        // $schedule->command('email:inactive-users')->everyMinute();
 
-        
+         // $schedule->command('registered:users')->everyMinute();
+
+        //using artisan call
+
+        // $schedule->call(function () {
+               
+        //    \Artisan::call('registered:users');
+               
+        // })->everyMinute();
+
     }
+
 
     /**
      * Register the commands for the application.

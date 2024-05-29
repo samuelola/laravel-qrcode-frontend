@@ -32,6 +32,8 @@ Route::get('/crypto', 'ProductController@crypto')->name('products.crypto');
 
 Route::get('/run', 'ProductController@sch')->name('products.sch');
 
+Route::get('/sammy', 'ProductController@sammyola')->name('sammyola');
+
 Route::get('/testcron', 'ProductController@test_cron')->name('products.test_cron');
 
 Route::get('/initial', 'ProductController@initial')->name('initial');

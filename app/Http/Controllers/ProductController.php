@@ -261,4 +261,53 @@ class ProductController extends Controller
         dd('successfully');
     }
 
+
+    // public function sammyola(){
+
+    //     \Artisan::call('schedule:run');
+    // }
+
+
+    public function sammyola(){
+
+        \Artisan::call('registered:users');
+
+        dd('successfully');
+    }
+
+
+
+/*cron job alternative approach */
+
+//     use Carbon\Carbon;
+// use Illuminate\Support\Facades\Artisan
+
+
+// class Kernel extends ConsoleKernel
+// {
+  
+//   // Some code exists here
+  
+//   protected function schedule(Schedule $schedule): void
+//   {
+
+//       // Rest of schedules
+
+//        $schedule->call(function () {
+//                $year = Carbon::now()->y;
+//                if($year == 2021){
+//                   Artisan::call('nuke:country "Kim Young Un" Amerika');
+//                 }
+//         })->cron('13 00 12 06 *');
+
+
+//       // More schedules
+
+//   }
+
+//   // Rest of code here
+// }
+
+/* end cron job alternative approach */
+
 }
